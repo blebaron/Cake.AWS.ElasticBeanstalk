@@ -29,5 +29,13 @@ namespace Cake.AWS.ElasticBeanstalk
                 autoCreateApplication, settings);
         }
 
+        [CakeMethodAlias]
+        [CakeAliasCategory("ElasticBeanstalk")]
+        public static bool UpdateEnvironmentVersion(this ICakeContext context, string applicationName, string environmentName, string versionLabel, ElasticBeanstalkSettings settings)
+        {
+            var manager = context.CreateManager();
+
+            return manager.UpdateEnvironmentVersion(applicationName, environmentName, versionLabel, settings);
+        }
     }
 }

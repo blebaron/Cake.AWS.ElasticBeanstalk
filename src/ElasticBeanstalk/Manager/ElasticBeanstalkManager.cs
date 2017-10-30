@@ -65,6 +65,40 @@ namespace Cake.AWS.ElasticBeanstalk
             }
         }
 
+        public bool UpdateEnvironmentVersion(string applicationName, string environmentName, string versionLabel, ElasticBeanstalkSettings settings)
+        {
+            if (string.IsNullOrEmpty(applicationName))
+            {
+                throw new ArgumentNullException(nameof(applicationName));
+            }
+
+            if (string.IsNullOrEmpty(environmentName))
+            {
+                throw new ArgumentNullException(nameof(environmentName));
+            }
+
+            if (string.IsNullOrEmpty(versionLabel))
+            {
+                throw new ArgumentNullException(nameof(versionLabel));
+            }
+
+            try
+            {
+                var client = GetClient(settings);
+                client.UpdateEnvironment(new UpdateEnvironmentRequest {
+                    ApplicationName = applicationName,
+                    EnvironmentName = environmentName,
+                    VersionLabel = versionLabel
+                });
+            }
+            catch (Exception e)
+            {
+                _Log.Error($"Failed to update environment '{e.Message}'");
+                return false;
+            }
+
+            return true;
+        }
 
         public bool CreateApplicationVersion(string applicationName, string description, string versionLabel, string s3Bucket, string s3Key, bool autoCreateApplication, ElasticBeanstalkSettings settings)
         {
