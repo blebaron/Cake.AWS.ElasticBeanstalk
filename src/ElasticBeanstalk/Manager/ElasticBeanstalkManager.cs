@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Amazon.ElasticBeanstalk;
 using Amazon.ElasticBeanstalk.Model;
 using Cake.Core;
@@ -98,6 +99,36 @@ namespace Cake.AWS.ElasticBeanstalk
             }
 
             return true;
+        }
+
+        public bool ApplicationVersionExists(string applicationName, string versionLabel, ElasticBeanstalkSettings settings)
+        {
+            if (string.IsNullOrEmpty(applicationName))
+            {
+                throw new ArgumentNullException(nameof(applicationName));
+            }
+
+            if (string.IsNullOrEmpty(versionLabel))
+            {
+                throw new ArgumentNullException(nameof(versionLabel));
+            }
+
+            try
+            {
+                var client = GetClient(settings);
+                var applicationVersionsResponse = client.DescribeApplicationVersions(new DescribeApplicationVersionsRequest
+                {
+                    ApplicationName = applicationName,
+                    VersionLabels = new List<string> { versionLabel }
+                });
+
+                return applicationVersionsResponse.ApplicationVersions.Count == 1 && applicationVersionsResponse.ApplicationVersions[0].VersionLabel == versionLabel;
+            }
+            catch (Exception e)
+            {
+                _Log.Error($"Failed to describe application version '{e.Message}'");
+                return false;
+            }
         }
 
         public bool CreateApplicationVersion(string applicationName, string description, string versionLabel, string s3Bucket, string s3Key, bool autoCreateApplication, ElasticBeanstalkSettings settings)

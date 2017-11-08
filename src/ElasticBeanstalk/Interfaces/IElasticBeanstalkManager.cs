@@ -11,5 +11,7 @@ namespace Cake.AWS.ElasticBeanstalk
             bool autoCreateApplication, ElasticBeanstalkSettings settings);
 
         bool UpdateEnvironmentVersion(string applicationName, string environmentName, string versionLabel, ElasticBeanstalkSettings settings);
+
+        bool ApplicationVersionExists(string applicationName, string versionLabel, ElasticBeanstalkSettings settings);
     }
 }
