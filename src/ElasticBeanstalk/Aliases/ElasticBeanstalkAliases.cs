@@ -1,4 +1,5 @@
-﻿using Cake.Core;
+﻿using Amazon.ElasticBeanstalk;
+using Cake.Core;
 using Cake.Core.Annotations;
 
 
@@ -44,6 +45,14 @@ namespace Cake.AWS.ElasticBeanstalk
         {
             var manager = context.CreateManager();
             return manager.ApplicationVersionExists(applicationName, versionLabel, settings);
+        }
+
+        [CakeMethodAlias]
+        [CakeAliasCategory("ElasticBeanstalk")]
+        public static EnvironmentHealth GetApplicationStatus(this ICakeContext context, ElasticBeanstalkSettings settings, string environmentName)
+        {
+            var manager = context.CreateManager();
+            return manager.GetApplicationVersionStatus(settings, environmentName);
         }
     }
 }

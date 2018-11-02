@@ -185,7 +185,17 @@ namespace Cake.AWS.ElasticBeanstalk
             _Log.Verbose("Successfully created new application version '{0}' for application '{1}'", versionLabel, applicationName);
             return true;
         }
-      
+
+        public EnvironmentHealth GetApplicationVersionStatus(ElasticBeanstalkSettings settings, string environmentName)
+        {
+            var client = GetClient(settings);
+            var environmentInfoResponse = client.DescribeEnvironmentHealth(new DescribeEnvironmentHealthRequest
+            {
+                AttributeNames = new List<string> {"Status"},
+                EnvironmentName = environmentName
+            });
+            return environmentInfoResponse.Status;
+        }
     }
 
 }
